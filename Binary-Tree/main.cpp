@@ -8,10 +8,11 @@ int main() {
 
 	BinaryTree<int> tree;
 
-	for (int i = 0; i < 10; ++i) {
-		tree.push(rand() % 10);
-	}
+	tree.push(5).push(2).push(3).push(8).push(2).push(7).push(9);
 	tree.out();
+
+	/*tree.pop(5);
+	tree.out();*/
 
 	cout << "Нажмите ввод, чтобы продолжить";
 	cin.get();
