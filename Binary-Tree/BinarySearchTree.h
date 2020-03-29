@@ -1,5 +1,16 @@
 #pragma once
 #include <iostream>
+#include <sstream>
+
+int isOperator(char ch) {
+	switch (ch) {
+	case '+':
+	case '-':
+	case '*':
+	case '/': return 1;
+	default:  return 0;
+	}
+}
 
 template <typename T>
 class BinarySearchTree {
@@ -36,6 +47,7 @@ private:
 		Рекурсивное удаление всего поддерева вместе с родителем
 	*/
 	void _delete(TreeNode* _parent) {
+		if (!_parent) return;
 		if (_parent->right != nullptr) _delete(_parent->right);
 		if (_parent->left != nullptr)  _delete(_parent->left);
 		delete _parent;
@@ -57,7 +69,7 @@ private:
 		}
 	}
 
-	bool _isLeaf(TreeNode* elem) const {
+	inline bool _isLeaf(TreeNode* elem) const {
 		if (elem != nullptr)
 			return elem->right == nullptr && elem->left == nullptr;
 		return false;
@@ -75,6 +87,50 @@ private:
 			std::cout << p->data << std::endl;
 			_print_tree(p->left, level + 1);
 		}
+	}
+
+	/* 
+		Собирает в буфер строку в инфиксной форме 
+	*/
+	void _buf_infix(TreeNode* _parent, std::stringstream& buf) const {
+		if (!_parent) return;
+		if (_isLeaf(_parent)) {
+			buf << _parent->data;
+		}
+		else {
+			buf << " (";
+			_buf_infix(_parent->left, buf);
+			buf << ") " << _parent->data << " (";
+			_buf_infix(_parent->right, buf);
+			buf << ") ";
+		}
+	}
+
+	bool _push_elem(TreeNode* _parent, T _data) {
+		if (!_parent && !m_root) {
+			m_root = new TreeNode(_data);
+			return true;
+		}
+		else if (_parent && isOperator(_parent->data)) {
+			if (!_parent->left) {
+				_parent->left = new TreeNode(_data);
+				return true;
+			}
+			
+			if (_push_elem(_parent->left, _data)) {
+				return true;
+			}
+			else {
+				if (!_parent->right) {
+					_parent->right = new TreeNode(_data);
+					return true;
+				}
+
+				return _push_elem(_parent->right, _data);
+			}
+		}
+
+		return false;
 	}
 
 public:
@@ -191,5 +247,30 @@ public:
 		std::cout << std::endl;
 		_print_tree(m_root);
 		std::cout << std::endl;
+	}
+
+	void out_infix() const {
+		std::stringstream buf;
+
+		std::cout << std::endl;
+		_buf_infix(m_root, buf);
+		std::cout << buf.str() << std::endl;
+	}
+
+	std::stringstream buf_infix() const {
+		std::stringstream buf;
+
+		std::cout << std::endl;
+		_buf_infix(m_root, buf);
+		std::cout << std::endl;
+
+		return buf;
+	}
+
+	void operator= (std::string _inputString) {
+		del();
+		for (auto elem : _inputString) {
+			_push_elem(m_root, elem);
+		}
 	}
 };
