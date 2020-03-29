@@ -33,7 +33,7 @@ private:
 	}
 
 	/*
-		Рекурсивное удаление всего поддерева вместе с родителем
+		Р РµРєСѓСЂСЃРёРІРЅРѕРµ СѓРґР°Р»РµРЅРёРµ РІСЃРµРіРѕ РїРѕРґРґРµСЂРµРІР° РІРјРµСЃС‚Рµ СЃ СЂРѕРґРёС‚РµР»РµРј
 	*/
 	void _delete(TreeNode* _parent) {
 		if (_parent->right != nullptr) _delete(_parent->right);
@@ -42,7 +42,7 @@ private:
 	}
 
 	/* 
-		Рекурсивный вывод в формате левого списка, от родителя поддерева
+		Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹РІРѕРґ РІ С„РѕСЂРјР°С‚Рµ Р»РµРІРѕРіРѕ СЃРїРёСЃРєР°, РѕС‚ СЂРѕРґРёС‚РµР»СЏ РїРѕРґРґРµСЂРµРІР°
 	*/
 	void _out(TreeNode* _parent) const {
 		std::cout << _parent->data;
@@ -64,7 +64,7 @@ private:
 	}
 
 	/*
-		Рекурсивный вывод в формате дерева, от родителя поддерева
+		Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹РІРѕРґ РІ С„РѕСЂРјР°С‚Рµ РґРµСЂРµРІР°, РѕС‚ СЂРѕРґРёС‚РµР»СЏ РїРѕРґРґРµСЂРµРІР°
 	*/
 	void _print_tree(TreeNode* p, int level = 0) const
 	{
@@ -118,7 +118,7 @@ public:
 	}
 
 	int pop(const T& _data) {
-		/* Если дерево пустое */
+		/* Р•СЃР»Рё РґРµСЂРµРІРѕ РїСѓСЃС‚РѕРµ */
 		if (isEmpty()) return 0;
 
 		TreeNode* deletingElem = _find(_data);
@@ -128,9 +128,9 @@ public:
 			if (deletingElem == parentElem->right) isRight = true;
 		}
 
-		/* Если такого элемента нет */
+		/* Р•СЃР»Рё С‚Р°РєРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РЅРµС‚ */
 		if (!deletingElem) return 0;
-		/* Если удаляемый элемент - лист */
+		/* Р•СЃР»Рё СѓРґР°Р»СЏРµРјС‹Р№ СЌР»РµРјРµРЅС‚ - Р»РёСЃС‚ */
 		else if (_isLeaf(deletingElem)) {
 			if (!parentElem) m_root = nullptr;
 			else {
@@ -138,7 +138,7 @@ public:
 				else parentElem->left = deletingElem->left;
 			}
 		}
-		/* Если у удаляемого элемента есть только левый потомок */
+		/* Р•СЃР»Рё Сѓ СѓРґР°Р»СЏРµРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РµСЃС‚СЊ С‚РѕР»СЊРєРѕ Р»РµРІС‹Р№ РїРѕС‚РѕРјРѕРє */
 		else if (!deletingElem->right) {
 			if (!parentElem) m_root = deletingElem->left;
 			else {
@@ -146,7 +146,7 @@ public:
 				else parentElem->left = deletingElem->left;
 			}
 		}
-		/* Если у удаляемого элемента есть только правый потомок */
+		/* Р•СЃР»Рё Сѓ СѓРґР°Р»СЏРµРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РµСЃС‚СЊ С‚РѕР»СЊРєРѕ РїСЂР°РІС‹Р№ РїРѕС‚РѕРјРѕРє */
 		else if (!deletingElem->left) {
 			if (!parentElem) m_root = deletingElem->right;
 			else {
@@ -154,16 +154,16 @@ public:
 				else parentElem->left = deletingElem->right;
 			}
 		}
-		/* Если есть оба потомка */
+		/* Р•СЃР»Рё РµСЃС‚СЊ РѕР±Р° РїРѕС‚РѕРјРєР° */
 		else {
 			TreeNode* parentNextElem = deletingElem;
 			TreeNode* nextElem = deletingElem->right;
 
-			/* Если от правого потомка нельзя пойти влево */
+			/* Р•СЃР»Рё РѕС‚ РїСЂР°РІРѕРіРѕ РїРѕС‚РѕРјРєР° РЅРµР»СЊР·СЏ РїРѕР№С‚Рё РІР»РµРІРѕ */
 			if (!nextElem->left) {
 				nextElem->left = deletingElem->left;
 			}
-			/* Если можно пойти влево */
+			/* Р•СЃР»Рё РјРѕР¶РЅРѕ РїРѕР№С‚Рё РІР»РµРІРѕ */
 			else {
 				while (nextElem->left) {
 					parentNextElem = nextElem;
