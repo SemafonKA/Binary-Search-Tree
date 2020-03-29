@@ -42,7 +42,7 @@ private:
 	}
 
 	/* 
-		Рекурсивный вывод в формате левого списка, от родителя
+		Рекурсивный вывод в формате левого списка, от родителя поддерева
 	*/
 	void _out(TreeNode* _parent) const {
 		std::cout << _parent->data;
@@ -63,8 +63,22 @@ private:
 		return false;
 	}
 
+	/*
+		Рекурсивный вывод в формате дерева, от родителя поддерева
+	*/
+	void _print_tree(TreeNode* p, int level = 0) const
+	{
+		if (p)
+		{
+			_print_tree(p->right, level + 1);
+			for (int i = 0; i < level; i++) std::cout << "    ";
+			std::cout << p->data << std::endl;
+			_print_tree(p->left, level + 1);
+		}
+	}
+
 public:
-	~BinaryTree() {
+	~BinarySearchTree() {
 		_delete(m_root);
 	}
 
@@ -80,7 +94,7 @@ public:
 	
 	bool isEmpty() const { return m_root == nullptr; }
 
-	BinaryTree& push(const T& _data) {
+	BinarySearchTree& push(const T& _data) {
 		TreeNode* newNode = new TreeNode(_data);
 		if (m_root == nullptr) {
 			m_root = newNode;
@@ -103,14 +117,79 @@ public:
 		return *this;
 	}
 
-	/*int pop(const T& _data) {
+	int pop(const T& _data) {
+		/* Если дерево пустое */
 		if (isEmpty()) return 0;
 
+		TreeNode* deletingElem = _find(_data);
+		TreeNode* parentElem = _find_parent(_data);
+		bool isRight{ false };
+		if (parentElem) {
+			if (deletingElem == parentElem->right) isRight = true;
+		}
+
+		/* Если такого элемента нет */
+		if (!deletingElem) return 0;
+		/* Если удаляемый элемент - лист */
+		else if (_isLeaf(deletingElem)) {
+			if (!parentElem) m_root = nullptr;
+			else {
+				if (isRight) parentElem->right = deletingElem->left;
+				else parentElem->left = deletingElem->left;
+			}
+		}
+		/* Если у удаляемого элемента есть только левый потомок */
+		else if (!deletingElem->right) {
+			if (!parentElem) m_root = deletingElem->left;
+			else {
+				if (isRight) parentElem->right = deletingElem->left;
+				else parentElem->left = deletingElem->left;
+			}
+		}
+		/* Если у удаляемого элемента есть только правый потомок */
+		else if (!deletingElem->left) {
+			if (!parentElem) m_root = deletingElem->right;
+			else {
+				if (isRight) parentElem->right = deletingElem->right;
+				else parentElem->left = deletingElem->right;
+			}
+		}
+		/* Если есть оба потомка */
+		else {
+			TreeNode* parentNextElem = deletingElem;
+			TreeNode* nextElem = deletingElem->right;
+
+			/* Если от правого потомка нельзя пойти влево */
+			if (!nextElem->left) {
+				nextElem->left = deletingElem->left;
+			}
+			/* Если можно пойти влево */
+			else {
+				while (nextElem->left) {
+					parentNextElem = nextElem;
+					nextElem = nextElem->left;
+				}
+				parentNextElem->left = nextElem->right;
+				nextElem->left = deletingElem->left;
+				nextElem->right = deletingElem->right;
+			}
+			if (!parentElem) m_root = nextElem;
+			else if (isRight) parentElem->right = nextElem;
+			else parentElem->left = nextElem;
+		}
+
+		delete deletingElem;
 		return 1;
-	}*/
+	}
 
 	void out() const {
 		_out(m_root);
+		std::cout << std::endl;
+	}
+
+	void out_tree () const {
+		std::cout << std::endl;
+		_print_tree(m_root);
 		std::cout << std::endl;
 	}
 };
