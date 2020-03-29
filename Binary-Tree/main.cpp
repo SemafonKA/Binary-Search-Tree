@@ -15,7 +15,12 @@ int main() {
 	tree = inputString;
 
 	PostficsCalc calc;
-	cout << calc.fromNormal(tree.buf_infix().str()) << endl;
+	try {
+		cout << calc.fromNormal(tree.buf_infix().str()) << endl;
+	}
+	catch (std::logic_error err) {
+		cerr << err.what() << endl;
+	}
 
 	cout << "Нажмите ввод, чтобы продолжить";
 	cin.get();
