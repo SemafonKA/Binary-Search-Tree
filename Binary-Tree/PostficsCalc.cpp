@@ -1,28 +1,29 @@
 #include "PostficsCalc.h"
+#include <sstream>
 using namespace std;
 
 char PostficsCalc::isOperator(char symbol) {
 	switch (symbol) {
-	case '+':									// begFallfrow
+	case '+':									// begin Fallfrow
 	case '-':
 	case '*':
-	case '/':	return symbol;					// endFallthrow
+	case '/':	return symbol;					// end Fallthrow
 	default:	return 0;
 	}
 }
 
 char PostficsCalc::isPlusMinus(char symbol) {
 	switch (symbol) {
-	case '+':						//begFallthrow
-	case '-':	return symbol;		//endFallthrow
+	case '+':						//begin Fallthrow
+	case '-':	return symbol;		//end Fallthrow
 	default:	return 0;
 	}
 }
 
 char PostficsCalc::isMultDiv(char symbol) {
 	switch (symbol) {
-	case '*':						//begFallthrow
-	case '/':	return symbol;		//endFallthrow
+	case '*':						//begin Fallthrow
+	case '/':	return symbol;		//end Fallthrow
 	default:	return 0;
 	}
 }
@@ -144,7 +145,7 @@ string PostficsCalc::addZeros(const string& inputString) {
 		else if (inputString[i] == '.') {
 			isDouble	= true;
 		}
-		else if (isPlusMinus(inputString[i]) && isPrevOp) {
+		else if (isPlusMinus(inputString[i]) && isPrevOp && !isPrevNum) {
 			if (!isPrevWS) outputString += ' ';
 			outputString += "0 ";
 
@@ -162,7 +163,6 @@ string PostficsCalc::addZeros(const string& inputString) {
 			isPrevWS	= false;
 			isDouble	= false;
 		}
-
 		outputString += inputString[i];
 	}
 
@@ -254,7 +254,6 @@ double PostficsCalc::fromPostfics(const string& inputString) {
 
 string PostficsCalc::toPostfics(const string& inputString) {
 	if (inputString.empty()) {
-		cerr << "ERR: Empty input string!" << endl;
 		throw logic_error("ERR: Empty input string!");
 		return inputString;
 	}
@@ -264,8 +263,8 @@ string PostficsCalc::toPostfics(const string& inputString) {
 
 	string inString = comToDot(inputString);
 	inString = addWS(inString);
-	inString = addZeros(inString);
 	inString = addSkippedMult(inString);
+	inString = addZeros(inString);
 
 	string outString;
 	stringstream inputBuffer;
