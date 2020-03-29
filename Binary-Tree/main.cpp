@@ -1,12 +1,12 @@
 #include <iostream>
-#include "BinaryTree.h"
+#include "BinarySearchTree.h"
 
 using namespace std;
 
 int main() {
 	system("chcp 65001"); system("cls");
 
-	BinaryTree<int> tree;
+	BinarySearchTree<int> tree;
 
 	tree.push(5).push(2).push(3).push(8).push(2).push(7).push(9);
 	tree.out();

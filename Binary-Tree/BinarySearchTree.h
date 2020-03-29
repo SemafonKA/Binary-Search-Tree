@@ -2,7 +2,7 @@
 #include <iostream>
 
 template <typename T>
-class BinaryTree {
+class BinarySearchTree {
 private:
 	class TreeNode {
 	public:
@@ -32,12 +32,18 @@ private:
 		return parentElem;
 	}
 
+	/*
+		Рекурсивное удаление всего поддерева вместе с родителем
+	*/
 	void _delete(TreeNode* _parent) {
 		if (_parent->right != nullptr) _delete(_parent->right);
 		if (_parent->left != nullptr)  _delete(_parent->left);
 		delete _parent;
 	}
 
+	/* 
+		Рекурсивный вывод в формате левого списка, от родителя
+	*/
 	void _out(TreeNode* _parent) const {
 		std::cout << _parent->data;
 		if(!_isLeaf(_parent)) {
