@@ -211,9 +211,10 @@ public:
 
 		member->next->next = nextMember;
 		if (nextMember == nullptr) { m_back = member->next; }
-		if (pos < 0) { m_front = member->next; }
+		else if (pos == -1) { nextMember->prev = member->next; }
+		if (pos == -1)		{ m_front = member->next; }
 		++m_listSize;
-
+		
 		return (*this);
 	}
 
