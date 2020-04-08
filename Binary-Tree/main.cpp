@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "BinarySearchTree.h"
 #include "PostficsCalc.h"
 
@@ -10,8 +11,15 @@ int main() {
 
 	BinarySearchTree<char> tree;
 
+	cout << "Введите числа строкой (либо введите 'F' чтобы загрузить с файла)" << endl;
 	string inputString;
 	getline(cin, inputString);
+	if (inputString == "f" || inputString == "F") {
+		ifstream inputFile("input.txt");
+		inputString.clear();
+		getline(inputFile, inputString);
+		cout << inputString << endl;
+	}
 	tree = inputString;
 
 	PostficsCalc calc;
